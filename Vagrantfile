@@ -16,8 +16,8 @@ Vagrant.configure("2") do |config|
       machine.vm.network "private_network", ip: "192.168.77.#{10+machine_id-1}"
 
       # Disable usb 2.0 support
-      machine.customize ["modifyvm", :id, "--usb", "on"]
-      machine.customize ["modifyvm", :id, "--usbehci", "off"]
+      # machine.customize ["modifyvm", :id, "--usb", "on"]
+      # machine.customize ["modifyvm", :id, "--usbehci", "off"]
 
       # Only execute once the Ansible provisioner,
       # when all the machines are up and ready.
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
           ansible.limit             = "vagrant"
           ansible.playbook          = "provisioning/playbook.yml"
           ansible.inventory_path    = "provisioning/hosts/hosts"
-          ansible.verbose           = "vvv"
+          ansible.verbose           = "vvvv"
           ansible.raw_ssh_args      = ANSIBLE_RAW_SSH_ARGS
         end
       end
