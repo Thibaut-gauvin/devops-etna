@@ -1,0 +1,12 @@
+
+---
+- hosts: all
+
+  vars_files:
+    - vars/all.yml
+    
+- hosts: vagrant
+
+  roles:
+    - docker
+

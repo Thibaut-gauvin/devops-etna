@@ -1,0 +1,119 @@
+---
+- name: Update apt cache
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Ensure that APT works with the https method
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt: 
+    name: {{ item }} 
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: Install docker GPG key
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt_key: 
+    keyserver: hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D 
+    state: present
+  tags:
+    - docker
+    - gpg_key
+
+- name: Add docker apt repository
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt_repository: 
+    repo: "deb https://apt.dockerproject.org/repo {{ ansible_distribution|lower }}-{{ ansible_distribution_release }} main" 
+    state: present
+  tags:
+    - docker
+    - apt_repository
+
+- name: Update apt-cache
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt: update_cache=yes
+  tags:
+    - docker
+    - apt_cache
+
+- name: Purge the old repo if it exists
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt: name={{ item }} purge=yes
+  with_items:
+    - "lxc-docker*"
+    - "docker.io*"
+  ignore_errors: yes
+  tags:
+    - docker
+    - apt_purge
+
+- name: Install docker package
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt: 
+    name: docker-engine 
+    state: present
+  notify: Start Docker
+  tags:
+    - docker
+    - install
+
+- name: Add vagrant user to docker & sudo group
+  become: true
+  when: inventory_hostname == "vagrant"
+  user:
+    name: vagrant
+    shell: /bin/bash
+    groups: docker,sudo
+    append: yes
+
+- name: Install python-docker packages
+  become: true
+  when: inventory_hostname == "vagrant"
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - htop
+    - ncdu
+    - python-docker
+
+- name: Get installed pip version
+  when: inventory_hostname == "vagrant"
+  command: pip --version
+  register: pip_version_output
+  ignore_errors: yes
+  changed_when: false
+
+- name: Download get-pip.py
+  become: true
+  when: inventory_hostname == "vagrant"
+  get_url: 
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+
+# Install pip if it's not already installed, or if
+# the desired versions of pip aren't installed
+# The regular expression extracts '9.0' out of '9.0.*'
+- name: Install pip
+  become: true
+  command: "python get-pip.py pip=={{ pip_version }}"
+  when:  pip_version_output | failed or not pip_version_output.stdout | search(pip_version)
+  args:
+    chdir: /tmp
+
+- name: Install pip packages
+  become: true
+  when: inventory_hostname == "vagrant"
+  pip:
+    name: docker-py
+    state: latest
