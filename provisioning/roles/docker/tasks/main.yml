@@ -20,11 +20,9 @@
   become: true
   when: inventory_hostname == "vagrant"
   apt_key: 
-    keyserver: hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D 
+    keyserver: hkp://p80.pool.sks-keyservers.net:80
+    id: 58118E89F3A912897C070ADBF76221572C52609D
     state: present
-  tags:
-    - docker
-    - gpg_key
 
 - name: Add docker apt repository
   become: true
@@ -32,17 +30,11 @@
   apt_repository: 
     repo: "deb https://apt.dockerproject.org/repo {{ ansible_distribution|lower }}-{{ ansible_distribution_release }} main" 
     state: present
-  tags:
-    - docker
-    - apt_repository
 
 - name: Update apt-cache
   become: true
   when: inventory_hostname == "vagrant"
   apt: update_cache=yes
-  tags:
-    - docker
-    - apt_cache
 
 - name: Purge the old repo if it exists
   become: true
@@ -54,9 +46,6 @@
     - "lxc-docker*"
     - "docker.io*"
   ignore_errors: yes
-  tags:
-    - docker
-    - apt_purge
 
 - name: Install docker package
   become: true
@@ -65,9 +54,6 @@
     name: docker-engine 
     state: present
   notify: Start Docker
-  tags:
-    - docker
-    - install
 
 - name: Add vagrant user to docker & sudo group
   become: true
