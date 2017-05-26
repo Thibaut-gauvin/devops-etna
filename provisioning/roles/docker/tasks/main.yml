@@ -10,7 +10,7 @@
   become: true
   when: inventory_hostname == "vagrant"
   apt: 
-    name: {{ item }} 
+    name: "{{ item }}"
     state: present
   with_items:
     - apt-transport-https
@@ -47,7 +47,9 @@
 - name: Purge the old repo if it exists
   become: true
   when: inventory_hostname == "vagrant"
-  apt: name={{ item }} purge=yes
+  apt:
+    name: "{{ item }}"
+    purge: yes
   with_items:
     - "lxc-docker*"
     - "docker.io*"
