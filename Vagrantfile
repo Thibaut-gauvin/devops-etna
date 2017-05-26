@@ -11,9 +11,13 @@ Vagrant.configure("2") do |config|
   (1..N).each do |machine_id|
     config.vm.define "machine#{machine_id}" do |machine|
       machine.vm.box = "ARTACK/debian-jessie"
-      config.vm.box_url = "https://atlas.hashicorp.com/ARTACK/boxes/debian-jessie"
+      machine.vm.box_url = "https://atlas.hashicorp.com/ARTACK/boxes/debian-jessie"
       machine.vm.hostname = "machine#{machine_id}"
       machine.vm.network "private_network", ip: "192.168.77.#{10+machine_id-1}"
+
+      # Disable usb 2.0 support
+      machine.customize ["modifyvm", :id, "--usb", "on"]
+      machine.customize ["modifyvm", :id, "--usbehci", "off"]
 
       # Only execute once the Ansible provisioner,
       # when all the machines are up and ready.
