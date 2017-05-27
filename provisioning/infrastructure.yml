@@ -1,16 +1,14 @@
-
 ---
 - hosts: all
 
   vars_files:
     - vars/all.yml
 
+
+- hosts: docker-nodes
+
   roles:
     - bash
     - motd
-    
-- hosts: vagrant
-
-  roles:
     - docker
-
+    - docker_swarm

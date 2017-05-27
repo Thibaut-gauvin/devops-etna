@@ -1,2 +1,5 @@
 ---
-timezone: Europe/Paris
+# Ip of the swarm nodes
+ip_manager1: 192.168.42.100
+ip_worker1: 192.168.42.110
+ip_worker2: 192.168.42.120

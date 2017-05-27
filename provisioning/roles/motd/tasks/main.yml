@@ -1,6 +1,7 @@
 ---
 - name: Remove landscape-common package
   become: yes
+  when: "'docker-nodes' in group_names"
   apt:
    name: landscape-common
    state: absent
@@ -8,6 +9,7 @@
 
 - name: Create motd file
   become: yes
+  when: "'docker-nodes' in group_names"
   template:
     src: "{{ motd_file }}"
     dest: /etc/motd

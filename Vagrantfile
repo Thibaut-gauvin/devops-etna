@@ -42,8 +42,13 @@ Vagrant.configure(2) do |config|
 
             # Customize VM
             node.vm.hostname = machine[:hostname]
+
+            # Port Forwarding
             node.vm.network "private_network", ip: machine[:ip]
             node.vm.network :forwarded_port, guest: 22, host: machine[:ssh_port]
+
+            # Disable automatic synced folder mount
+            node.vm.synced_folder '.', '/vagrant', disabled: true
 
             node.vm.provider "virtualbox" do |vb|
                 vb.name = machine[:hostname]
@@ -71,12 +76,12 @@ Vagrant.configure(2) do |config|
                 vb.customize ["modifyvm", :id, "--usbehci", "off"]
             end
 
-            # Run provisioning once
+            # Run Ansible provisioning once
             if index == servers.size - 1
                 node.vm.provision :ansible do |ansible|
                     ansible.playbook          = "provisioning/infrastructure.yml"
                     ansible.inventory_path    = "provisioning/hosts/hosts"
-                    ansible.limit             = "vagrant"
+                    ansible.limit             = "docker-nodes"
                     ansible.verbose           = "" # Use v, vv, vvv, or vvvv to be ansible more verbose
                 end
             end

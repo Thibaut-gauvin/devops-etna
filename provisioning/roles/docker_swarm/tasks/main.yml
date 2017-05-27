@@ -1,0 +1,14 @@
+---
+# MANAGER
+- name: Init "Swarm Mode" on the first manager.
+  when: "'managers' in group_names"
+  debug:
+    msg: "MANAGERS"
+#  shell: docker swarm init
+#        --advertise-addr {{ ip_manager1 }}
+
+# WORKERS
+- name: Join the swarm manager
+  when: "'workers' in group_names"
+  debug:
+    msg: "WORKERS"
