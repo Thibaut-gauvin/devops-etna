@@ -1,0 +1,26 @@
+---
+- name: Set the IS_VAGRANT environment variable
+  become: true
+  lineinfile:
+    dest: /etc/profile.d/is_vagrant.sh
+    line: "export IS_VAGRANT=1"
+    create: yes
+  when: inventory_hostname == "vagrant"
+
+- name: Add custom bashrc
+  become: false
+  template:
+    src: bashrc
+    dest: "/home/{{ user }}/.bashrc"
+
+- name: Add custom git-prompt
+  become: false
+  template:
+    src: git_prompt.j2
+    dest: "/home/{{ user }}/.git-prompt.sh"
+
+- name: Add custom bash_aliases
+  become: false
+  template:
+    src: "{{ alias_file }}"
+    dest: "/home/{{ user }}/.bash_aliases"

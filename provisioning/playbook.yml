@@ -4,6 +4,10 @@
 
   vars_files:
     - vars/all.yml
+
+  roles:
+    - bash
+    - motd
     
 - hosts: vagrant
 

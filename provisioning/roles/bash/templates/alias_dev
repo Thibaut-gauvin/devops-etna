@@ -1,0 +1,25 @@
+##############
+# ALIAS FILE #
+##############
+
+######
+# File lists
+alias la='ls -a'    # List all
+alias ll='ls -alH'  # List detailed
+
+#####
+# Ask confirmation when removing or overwriting files
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+#####
+# Docker
+alias dops="docker ps -a"
+alias doi="docker images"
+alias doirm='docker rmi $(docker images -q)'
+alias dost='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+alias doc='docker-compose'
+
+
+# :mode=shellscript:
