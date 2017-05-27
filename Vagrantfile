@@ -34,11 +34,11 @@ servers=[
 Vagrant.configure(2) do |config|
     servers.each do |machine|
         config.vm.define machine[:hostname], primary: machine[:primary], autostart: machine[:autostart] do |node|
-            # base box
+            # Base box
             node.vm.box = "ARTACK/debian-jessie"
             node.vm.box_url = "https://atlas.hashicorp.com/ARTACK/boxes/debian-jessie"
 
-            # customize VM
+            # Customize VM
             node.vm.hostname = machine[:hostname]
             node.vm.network "private_network", ip: machine[:ip]
             node.vm.network :forwarded_port, guest: 22, host: machine[:ssh_port]
@@ -49,11 +49,11 @@ Vagrant.configure(2) do |config|
                 vb.cpus = machine[:cpu]
                 vb.customize ["modifyvm", :id, "--cpuexecutioncap", machine[:cpu_cap]]
 
-                # change the network card hardware for better performance
+                # Change the network card hardware for better performance
                 vb.customize ["modifyvm", :id, "--nictype1", "virtio" ]
                 vb.customize ["modifyvm", :id, "--nictype2", "virtio" ]
 
-                # suggested fix for slow network performance
+                # Suggested fix for slow network performance
                 # see https://github.com/mitchellh/vagrant/issues/1807
                 vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
                 vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
