@@ -1,11 +1,8 @@
 ---
-- hosts: all
+- hosts: docker-nodes
 
   vars_files:
     - vars/all.yml
-
-
-- hosts: docker-nodes
 
   roles:
     - bash

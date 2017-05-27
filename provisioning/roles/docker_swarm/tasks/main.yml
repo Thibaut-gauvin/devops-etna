@@ -1,14 +1,30 @@
 ---
-# MANAGER
-- name: Init "Swarm Mode" on the first manager.
-  when: "'managers' in group_names"
-  debug:
-    msg: "MANAGERS"
-#  shell: docker swarm init
-#        --advertise-addr {{ ip_manager1 }}
+  # Check if "Swarm Mode" is activated on host
+- name: Determine swarm status
+  shell: >
+    docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+  register: swarm_status
 
-# WORKERS
-- name: Join the swarm manager
-  when: "'workers' in group_names"
-  debug:
-    msg: "WORKERS"
+  # Config for Managers
+- name: Init "Swarm Mode" on the manager
+  when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
+  shell: docker swarm init
+        --advertise-addr "{{ ip_manager1 }}"
+
+  # Config for Workers
+- name: Get the Worker "join-token"
+  when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
+  shell: docker swarm join-token -q worker
+  register: docker_worker_token
+
+- name: Set worker_token fact
+  when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
+  set_fact: worker_token="{{ docker_worker_token.stdout }}"
+
+- name: Make workers join the Swarm Cluster
+  when: "'workers' in group_names and not 'active' in swarm_status.stdout_lines"
+  vars:
+    token: "{{ hostvars[groups['managers'][0]]['worker_token'] }}"
+  shell: docker swarm join
+         --token {{ token }}
+         {{ ip_manager1 }}:2377

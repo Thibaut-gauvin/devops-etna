@@ -6,7 +6,6 @@ servers=[
         :primary    => true,
         :autostart  => true,
         :ip         => "192.168.42.100",
-        :ssh_port   => 2201,
         :ram        => 512,
         :cpu        => 1,
         :cpu_cap    => 50
@@ -16,7 +15,6 @@ servers=[
         :primary    => false,
         :autostart  => true,
         :ip         => "192.168.42.110",
-        :ssh_port   => 2202,
         :ram        => 512,
         :cpu        => 1,
         :cpu_cap    => 50
@@ -26,7 +24,6 @@ servers=[
         :primary    => false,
         :autostart  => true,
         :ip         => "192.168.42.120",
-        :ssh_port   => 2203,
         :ram        => 512,
         :cpu        => 1,
         :cpu_cap    => 50
@@ -45,7 +42,6 @@ Vagrant.configure(2) do |config|
 
             # Port Forwarding
             node.vm.network "private_network", ip: machine[:ip]
-            node.vm.network :forwarded_port, guest: 22, host: machine[:ssh_port]
 
             # Disable automatic synced folder mount
             node.vm.synced_folder '.', '/vagrant', disabled: true
