@@ -6,9 +6,9 @@
 - Install Docker Cluster via Ansible
     - :white_check_mark: Provision 3 VM
     - :white_check_mark: Install docker on VM
-    - :negative_squared_cross_mark: Enable Swarm
-    - :negative_squared_cross_mark: Configure Swarm manager
-    - :negative_squared_cross_mark: Configure Swarm worker
+    - :white_check_mark: Enable Swarm
+    - :white_check_mark: Configure Swarm Manager
+    - :white_check_mark: Configure Swarm Workers
 - Deploy a Docker Registry
 - Deploy TICK stack via Ansible
     - :negative_squared_cross_mark: Build custom docker images
@@ -22,6 +22,7 @@
 
 
 ## Subject
+
 - [Subjects](docs/subjects/subject.png)
 - [Subjects Extends](docs/subjects/extends.pdf)
 
