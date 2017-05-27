@@ -2,6 +2,10 @@
 
 List of docker command & usage.
 
+Useful doc :
+- [Swarm tutorial](https://docs.docker.com/engine/swarm/swarm-tutorial)
+- [How services work](https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/#replicated-and-global-services)
+
 ## Base :
 
 - List container :
@@ -47,7 +51,8 @@ The following commands assume that your are ssh to the swarm manager node
             --token SWMTKN-1-18aipdh7uz9p80vda6at0u3wiffzo7zm7wpjyrsi12joh6ylav-1npijtig144p5k27wcxhz8lej \
             192.168.42.100:2377
         
-        # Run the command (in worker1, worker2 cli)
+        # Run the command (in worker1 or worker2 cli)
+        $ vagrant ssh worker1 #
         ~> docker swarm join --token SWMTKN-1-18aipdh7uz9p80vda6at0u3wiffzo7zm7wpjyrsi12joh6ylav-1npijtig144p5k27wcxhz8lej 192.168.42.100:2377
 
 - List node of your swarm :
