@@ -1,3 +1,5 @@
+Vagrant.require_version ">= 1.9.0"
+
 servers=[
     {
         :hostname   => "manager1",
@@ -32,7 +34,7 @@ servers=[
 ]
 
 Vagrant.configure(2) do |config|
-    servers.each do |machine|
+    servers.each_with_index do |(machine), index|
         config.vm.define machine[:hostname], primary: machine[:primary], autostart: machine[:autostart] do |node|
             # Base box
             node.vm.box = "ARTACK/debian-jessie"
@@ -68,15 +70,16 @@ Vagrant.configure(2) do |config|
                 vb.customize ["modifyvm", :id, "--usb", "on"]
                 vb.customize ["modifyvm", :id, "--usbehci", "off"]
             end
-        end
-    end
-end
 
-Vagrant.configure(2) do |config|
-    config.vm.provision :ansible do |ansible|
-        ansible.playbook          = "provisioning/playbook.yml"
-        ansible.inventory_path    = "provisioning/hosts/hosts"
-        ansible.limit             = "vagrant"
-        ansible.verbose           = "v" # Use v, vv, vvv, or vvvv to be ansible more verbose
+            # Run provisioning once
+            if index == servers.size - 1
+                node.vm.provision :ansible do |ansible|
+                    ansible.playbook          = "provisioning/infrastructure.yml"
+                    ansible.inventory_path    = "provisioning/hosts/hosts"
+                    ansible.limit             = "vagrant"
+                    ansible.verbose           = "" # Use v, vv, vvv, or vvvv to be ansible more verbose
+                end
+            end
+        end
     end
 end
