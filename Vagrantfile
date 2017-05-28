@@ -43,8 +43,8 @@ Vagrant.configure(2) do |config|
             # Port Forwarding
             node.vm.network "private_network", ip: machine[:ip]
 
-            # Disable automatic synced folder mount
-            node.vm.synced_folder '.', '/vagrant', disabled: true
+#            # Disable automatic synced folder mount
+#            node.vm.synced_folder '.', '/vagrant', disabled: true
 
             node.vm.provider "virtualbox" do |vb|
                 vb.name = machine[:hostname]

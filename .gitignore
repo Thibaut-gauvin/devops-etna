@@ -1,4 +1,4 @@
 # Vagrant files
 /.vagrant/
 /provisioning/*.retry
-/provisioning/docker/.data/
+/provisioning/docker/.docker_volumes/

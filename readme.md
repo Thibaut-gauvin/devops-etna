@@ -10,6 +10,8 @@
     - :white_check_mark: Configure Swarm Manager
     - :white_check_mark: Configure Swarm Workers
 - Deploy a Docker Registry
+    - :white_check_mark: configure the Docker Registry
+    - :white_check_mark: run the Docker Registry
 - Deploy TICK stack via Ansible
     - :negative_squared_cross_mark: Build custom docker images
     - :negative_squared_cross_mark: Push images to docker registry
@@ -17,7 +19,7 @@
     - :negative_squared_cross_mark: Deploy container on swarm cluster
 - Build Continuous Integration & Continuous Deployment infrastructures
 - Build & configure CI & CD pipeline
-- Deploy Reverse Proxy & Boad Balancing
+- Deploy Reverse Proxy & Load Balancing solution
 - (BONUS) Deploy Elastic Search & Kibana
 
 

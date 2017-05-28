@@ -5,14 +5,13 @@
   docker_image:
     name: registry
     state: present
-    tag: 2.6
+    tag: 2
 
-- name: Start Registry service
+- name: Start docker "Registry" service
   become: true
   when: "'managers' in group_names"
   docker_service:
-    project_name: devops-etna
-    project_src: docker
+    project_src: "/vagrant/provisioning/docker"
     files: docker-compose_registry.yml
     state: present
     build: no
