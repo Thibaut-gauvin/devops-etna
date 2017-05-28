@@ -1,0 +1,6 @@
+---
+- name: Deploy tick stack
+  become: true
+  when: "'docker-nodes' in group_names"
+  apt:
+    update_cache: yes
