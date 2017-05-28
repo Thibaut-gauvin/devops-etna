@@ -98,9 +98,29 @@
   args:
     chdir: /tmp
 
-- name: Install docker-py
-  become: true
+- name: Check if docker-compose is installed
   when: "'docker-nodes' in group_names"
+  stat: "path=/usr/local/bin/docker-compose"
+  register: docker_compose_bin
+
+- name: Download docker-compose
+  become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.13.0/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+
+- name: Erase docker-py package
+  become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
   pip:
     name: docker-py
-    state: latest
+    state: absent
+
+- name: Reinstall docker pip package
+  become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
+  pip:
+    name: docker
+    state: forcereinstall

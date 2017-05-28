@@ -1,26 +1,26 @@
 ---
-  # Check if "Swarm Mode" is activated on host
+# Check if "Swarm Mode" is activated on host
 - name: Determine swarm status
   become: true
   shell: >
     docker info | egrep '^Swarm: ' | cut -d ' ' -f2
   register: swarm_status
 
-  # Config for Managers
+# Config for Managers
 - name: Init "Swarm Mode" on the manager
   become: true
   when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
   shell: docker swarm init
         --advertise-addr "{{ ip_manager1 }}"
 
-  # Config for Workers
-- name: Get the Worker "join-token"
+# Config for Workers
+- name: Get the Worker "join-token" from the manager node
   become: true
   when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
   shell: docker swarm join-token -q worker
   register: docker_worker_token
 
-- name: Set worker_token fact
+- name: Set "worker_token" fact for reeuse on other hosts
   when: "'managers' in group_names and not 'active' in swarm_status.stdout_lines"
   set_fact: worker_token="{{ docker_worker_token.stdout }}"
 
