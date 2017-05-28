@@ -9,3 +9,4 @@
     - motd
     - docker
     - docker_swarm
+    - docker_registry
