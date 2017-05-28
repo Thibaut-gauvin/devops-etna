@@ -12,14 +12,10 @@ To provision virtual machines you need :
 ## Installation:
 
 **Assuming following :**  
-    - `$ ...` is your local machine cli (terminal)    
-    - `~> ...` is your docker cli (inside a container)
+`$ ...` is your local machine cli (terminal)    
+`~> ...` is your docker cli (inside a container)
 
 
-- **Start VM :**
-    
-        $ make start
-        
-- **Build VM :**
+- **Start & Build VM :**
     
         $ make provision

@@ -1,11 +1,13 @@
 ---
 - name: Update apt cache
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     update_cache: yes
 
 - name: Ensure that APT works with the https method
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     name: "{{ item }}"
     state: present
@@ -17,6 +19,7 @@
 
 - name: Install docker GPG key
   become: true
+  when: "'docker-nodes' in group_names"
   apt_key:
     keyserver: hkp://p80.pool.sks-keyservers.net:80
     id: 58118E89F3A912897C070ADBF76221572C52609D
@@ -24,17 +27,20 @@
 
 - name: Add docker apt repository
   become: true
+  when: "'docker-nodes' in group_names"
   apt_repository:
     repo: "deb https://apt.dockerproject.org/repo {{ ansible_distribution|lower }}-{{ ansible_distribution_release }} main"
     state: present
 
 - name: Update apt-cache
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     update_cache: yes
 
 - name: Purge the old repo if it exists
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     name: "{{ item }}"
     purge: yes
@@ -45,6 +51,7 @@
 
 - name: Install docker package
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     name: docker-engine
     state: present
@@ -52,6 +59,7 @@
 
 - name: Add vagrant user to docker & sudo group
   become: true
+  when: "'docker-nodes' in group_names"
   user:
     name: vagrant
     shell: /bin/bash
@@ -60,6 +68,7 @@
 
 - name: Install python-docker packages
   become: true
+  when: "'docker-nodes' in group_names"
   apt:
     pkg: "{{ item }}"
     state: installed
@@ -71,6 +80,7 @@
     - python-docker
 
 - name: Check if pip is installed
+  when: "'docker-nodes' in group_names"
   stat: "path=/usr/local/bin/pip"
   register: pip_bin
 
@@ -88,8 +98,29 @@
   args:
     chdir: /tmp
 
-- name: Install pip packages
+- name: Check if docker-compose is installed
+  when: "'docker-nodes' in group_names"
+  stat: "path=/usr/local/bin/docker-compose"
+  register: docker_compose_bin
+
+- name: Download docker-compose
   become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.13.0/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 0755
+
+- name: Erase docker-py package
+  become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
   pip:
     name: docker-py
-    state: latest
+    state: absent
+
+- name: Reinstall docker pip package
+  become: true
+  when: "'docker-nodes' in group_names and not docker_compose_bin.stat.exists"
+  pip:
+    name: docker
+    state: forcereinstall
