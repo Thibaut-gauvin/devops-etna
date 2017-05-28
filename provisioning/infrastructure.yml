@@ -5,8 +5,11 @@
     - vars/all.yml
 
   roles:
+    # Customize bash env of the VM for conveniences
     - bash
     - motd
-    - docker
+
+    # Required Ansible Recipes :
     - docker_swarm
     - docker_registry
+    - docker_tickstack
