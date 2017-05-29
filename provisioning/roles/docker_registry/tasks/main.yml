@@ -11,7 +11,7 @@
   become: true
   when: "'managers' in group_names"
   docker_service:
-    project_src: "/vagrant/provisioning/docker"
+    project_src: "{{ project_root_directory }}/provisioning/docker"
     files: docker-compose_registry.yml
     state: present
     build: no

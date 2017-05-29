@@ -1,0 +1,19 @@
+---
+- name: Push images to the local registry
+  become: true
+  when: "'managers' in group_names"
+  docker_image:
+    name: "{{ item.name }}"
+    tag: "{{ item.tag }}"
+    repository: "localhost:5000/{{ item.name }}"
+    push: yes
+  with_items: "{{ docker_images }}"
+
+- name: Push "{{ symfony_img_name }}" image to the local registry
+  become: true
+  when: "'managers' in group_names"
+  docker_image:
+    name: "{{ symfony_img_name }}"
+    tag: "{{ symfony_img_tag }}"
+    repository: "localhost:5000/{{ symfony_img_name }}"
+    push: yes

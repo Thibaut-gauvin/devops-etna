@@ -1,6 +1,5 @@
 ---
-- name: Deploy tick stack
-  become: true
-  when: "'docker-nodes' in group_names"
-  apt:
-    update_cache: yes
+  - include: pull.yml
+  - include: build.yml
+  - include: push_registry.yml
+  - include: deploy.yml

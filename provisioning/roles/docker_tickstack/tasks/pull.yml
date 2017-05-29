@@ -1,0 +1,10 @@
+---
+- name: Pull required Docker images from Docker Hub
+  become: true
+  when: "'managers' in group_names"
+  docker_image:
+    name: "{{ item.name }}"
+    tag: "{{ item.tag }}"
+    state: present
+    pull: true
+  with_items: "{{ docker_images }}"

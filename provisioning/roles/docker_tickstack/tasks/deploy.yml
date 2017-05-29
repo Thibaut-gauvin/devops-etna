@@ -1,0 +1,11 @@
+---
+- name: Start TICK stack
+  become: true
+  when: "'managers' in group_names"
+  debug:
+    msg: DEBUG WIP
+#  docker_service:
+#    project_src: "{{ project_root_directory }}/provisioning/docker"
+#    files: docker-compose.yml
+#    state: present
+#    build: no

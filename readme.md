@@ -13,9 +13,9 @@
     - :white_check_mark: configure the Docker Registry
     - :white_check_mark: run the Docker Registry
 - Deploy TICK stack via Ansible
-    - :negative_squared_cross_mark: Build custom docker images
-    - :negative_squared_cross_mark: Push images to docker registry
-    - :negative_squared_cross_mark: Updates registry images (if needed)
+    - :white_check_mark: Build custom docker images
+    - :white_check_mark: Push images to docker registry
+    - :white_check_mark: Updates registry images
     - :negative_squared_cross_mark: Deploy container on swarm cluster
 - Build Continuous Integration & Continuous Deployment infrastructures
 - Build & configure CI & CD pipeline
