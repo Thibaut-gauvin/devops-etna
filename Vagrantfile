@@ -6,9 +6,9 @@ servers=[
         :primary    => true,
         :autostart  => true,
         :ip         => "192.168.42.100",
-        :ram        => 512,
+        :ram        => 2048,
         :cpu        => 1,
-        :cpu_cap    => 50
+        :cpu_cap    => 100
     },
     {
         :hostname   => "worker1",

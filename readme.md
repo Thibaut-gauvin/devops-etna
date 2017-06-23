@@ -19,6 +19,7 @@
     - :negative_squared_cross_mark: Updates registry images
     - :negative_squared_cross_mark: Deploy container on swarm cluster
 - 5). Build Continuous Integration & Continuous Deployment infrastructures
+    - :white_check_mark: Install & configure a GITLAB instance on the manager node
 - 6). Build & configure CI & CD pipeline
 - 7). Deploy Reverse Proxy & Load Balancing solution
 - (BONUS) Deploy Elastic Search & Kibana
@@ -32,7 +33,7 @@
 
 ## Install :
 
-Take a look at [install guide](docs/insokitall.md).
+Take a look at [install guide](docs/install.md).
 
 
 ## Docker helps :
