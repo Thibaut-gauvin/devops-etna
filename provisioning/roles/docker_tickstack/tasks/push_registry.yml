@@ -5,7 +5,7 @@
   docker_image:
     name: "{{ item.name }}"
     tag: "{{ item.tag }}"
-    repository: "localhost:5000/{{ item.name }}"
+    repository: "{{ docker_registry_url }}/{{ item.name }}"
     push: yes
   with_items: "{{ docker_images }}"
 
@@ -15,5 +15,5 @@
   docker_image:
     name: "{{ symfony_img_name }}"
     tag: "{{ symfony_img_tag }}"
-    repository: "localhost:5000/{{ symfony_img_name }}"
+    repository: "{{ docker_registry_url }}/{{ symfony_img_name }}"
     push: yes
