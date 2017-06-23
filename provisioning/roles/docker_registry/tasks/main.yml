@@ -7,11 +7,21 @@
     state: present
     tag: 2
 
-- name: Start docker "Registry" service
+- name: Check if Registry service is running
   become: true
   when: "'managers' in group_names"
-  docker_service:
-    project_src: "{{ project_root_directory }}/provisioning/docker"
-    files: docker-compose_registry.yml
-    state: present
-    build: no
+  shell: docker service ls --filter name=registry | grep '\sregistry\s' | awk '{ print $1 }'
+  register: registry_created
+
+# An error is raised if the directory not exist
+- name: Create directory to persist the Registry data
+  become: false
+  when: "'managers' in group_names and registry_created.stdout == ''"
+  file:
+    path: "{{ docker_volume_directory }}/registry"
+    state: directory
+
+- name: Start the Registry service
+  become: true
+  when: "'managers' in group_names and registry_created.stdout == ''"
+  shell: "docker service create --name registry --publish 5000:5000 --mount type=bind,source={{ project_root_directory }}/provisioning/docker/.docker_volumes/registry,destination=/var/lib/registry --constraint 'node.role == manager' registry:2"

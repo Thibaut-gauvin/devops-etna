@@ -4,9 +4,17 @@ ip_manager1: "192.168.42.100"
 ip_worker1: "192.168.42.110"
 ip_worker2: "192.168.42.120"
 
+# Registry Url
+docker_registry_url: 127.0.0.1:5000
+
 # Custom Images
 symfony_img_name: docker_symfony
 symfony_img_tag: 1
 
 # The project root directory on distant machine
-project_root_directory: "/vagrant"
+project_root_directory: /vagrant
+
+# The docker volume directory (To persist data's across containers creation & deletion)
+docker_volume_directory_path: "{{ project_root_directory }}/provisioning/docker"
+docker_volume_directory_name: .docker_volumes
+docker_volume_directory: "{{ docker_volume_directory_path }}/{{ docker_volume_directory_name }}"

@@ -7,33 +7,33 @@ version: '3'
 services:
 
     nginx:
-        image: nginx
+        image: 127.0.0.1:5000/nginx
         ports:
             - "${NGINX_LISTEN_PORT}:80"
             - "${NGINX_HTTPS_LISTEN_PORT}:443"
         links:
             - "symfony:symfony"
         volumes:
-            - "./../..:/home/docker:z"
-            - "./.docker_volumes/logs:/var/logs/nginx:Z"
+            - "./../..:/home/docker"
+            - "./.docker_volumes/logs:/var/logs/nginx"
             - "./default.conf:/etc/nginx/conf.d/default.conf:ro"
             - "./ssl:/etc/nginx/ssl:ro"
         networks:
           - tick_stack
 
     symfony:
-        image: docker_symfony
+        image: 127.0.0.1:5000/docker_symfony:1
         links:
             - "db:db"
         volumes:
-            - "./../..:/home/docker:z"
+            - "./../..:/home/docker"
             - "./php.ini:/usr/local/etc/php/conf.d/custom.ini:ro"
         working_dir: "/home/docker"
         networks:
           - tick_stack
 
     db:
-        image: mysql:5.7
+        image: 127.0.0.1:5000/mysql:5.7
 #        deploy:
 #            replicas: 3
 #            update_config:
@@ -55,7 +55,7 @@ services:
           - tick_stack
 
     visualizer:
-        image: dockersamples/visualizer:stable
+        image: 127.0.0.1:5000/dockersamples/visualizer:stable
         ports:
             - "8080:8080"
         volumes:
