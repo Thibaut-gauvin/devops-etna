@@ -1,11 +1,5 @@
 ---
-- name: Start TICK stack
+- name: Launch tick_stack in the swarm
   become: true
   when: "'managers' in group_names"
-  debug:
-    msg: DEBUG WIP
-#  docker_service:
-#    project_src: "{{ project_root_directory }}/provisioning/docker"
-#    files: docker-compose.yml
-#    state: present
-#    build: no
+  shell: "docker stack deploy --compose-file {{ project_root_directory }}/docker-stack.yml tick_stack"

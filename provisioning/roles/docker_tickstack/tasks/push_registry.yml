@@ -1,5 +1,5 @@
 ---
-- name: Push images to the local registry
+- name: Push official images to the local registry
   become: true
   when: "'managers' in group_names"
   docker_image:
@@ -9,11 +9,12 @@
     push: yes
   with_items: "{{ docker_images }}"
 
-- name: Push "{{ symfony_img_name }}" image to the local registry
+- name: Push custom services images to the local registry
   become: true
   when: "'managers' in group_names"
   docker_image:
-    name: "{{ symfony_img_name }}"
-    tag: "{{ symfony_img_tag }}"
-    repository: "{{ docker_registry_url }}/{{ symfony_img_name }}"
+    name: "{{ item.name }}"
+    tag: "{{ item.tag }}"
+    repository: "{{ docker_registry_url }}/{{ item.name }}"
     push: yes
+  with_items: "{{ service_images }}"

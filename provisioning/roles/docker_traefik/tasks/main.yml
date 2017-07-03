@@ -1,4 +1,0 @@
----
-- name: Run Traefik Load Balancer
-  debug:
-    msg: This role is not implemented yet

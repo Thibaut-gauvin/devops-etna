@@ -1,0 +1,84 @@
+####
+# This file is used to deploy the tick_stack in docker swarm
+# To run tick_stack locally, use the "docker-compose.yml" file
+#
+# To deploy in CLI with your hands, use this command :
+# docker stack deploy --compose-file docker-stack.yml tick_stack
+
+
+version: '3.2'
+
+services:
+
+    proxy:
+        image: traefik
+        command: --web --docker --docker.domain=docker.localhost
+        ports:
+            - "80:80"
+            - "8080:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+            - "./traefik.toml:/traefik.toml"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - tick_stack
+
+    visualizer:
+        image: 127.0.0.1:5000/dockersamples/visualizer:stable
+        ports:
+            - "81:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - tick_stack
+
+    mongo:
+        image: 127.0.0.1:5000/mongo:latest
+        volumes:
+            - "db-data:/data/db"
+        ports:
+            - "27017:27017"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - tick_stack
+
+    mongo_express:
+        image: 127.0.0.1:5000/mongo-express:latest
+        ports:
+            - "82:8081"
+        environment:
+            - "ME_CONFIG_MONGODB_ENABLE_ADMIN=true"
+            - "ME_CONFIG_BASICAUTH_USERNAME=etna"
+            - "ME_CONFIG_BASICAUTH_PASSWORD=devops"
+        networks:
+            - tick_stack
+
+    catalog_service:
+        image: 127.0.0.1:5000/catalog_service:1
+        ports:
+            - "8100:3000"
+        networks:
+            - tick_stack
+
+    booking_service:
+        image: 127.0.0.1:5000/booking_service:1
+        ports:
+            - "8200:3000"
+        networks:
+            - tick_stack
+
+
+networks:
+    tick_stack:
+
+
+volumes:
+    db-data:
+        external: true

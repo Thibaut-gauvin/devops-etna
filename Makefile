@@ -1,5 +1,5 @@
 ###################################
-#   MAKEFILE FOR OOSHOT-GALLERY   #
+#    MAKEFILE FOR DEVOPS-ETNA     #
 ###################################
 
 .SILENT:
