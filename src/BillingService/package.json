@@ -1,5 +1,5 @@
 {
-  "name": "booking",
+  "name": "billing",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,13 +7,13 @@
     "test": "mocha"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
+    "body-parser": "~1.16.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "debug": "~2.6.0",
+    "express": "~4.14.1",
     "mongodb": "^2.2.29",
-    "mongoose": "^4.11.1",
-    "morgan": "~1.8.1"
+    "mongoose": "^4.10.8",
+    "morgan": "~1.7.0"
   },
   "devDependencies": {
     "chai": "^4.0.2",

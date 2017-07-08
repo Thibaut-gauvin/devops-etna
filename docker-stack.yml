@@ -14,7 +14,7 @@ services:
         image: traefik
         command: --web --docker --docker.domain=docker.localhost
         ports:
-            - "80:80"
+            - "8181:80"
             - "8080:8080"
         volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
@@ -51,6 +51,8 @@ services:
 
     mongo_express:
         image: 127.0.0.1:5000/mongo-express:latest
+        depends_on:
+            - mongo
         ports:
             - "82:8081"
         environment:
@@ -62,18 +64,69 @@ services:
 
     catalog_service:
         image: 127.0.0.1:5000/catalog_service:1
+        depends_on:
+            - mongo
         ports:
             - "8100:3000"
+        deploy:
+            mode: replicated
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 10s
+                failure_action: continue
+                monitor: 60s
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
         networks:
             - tick_stack
 
     booking_service:
         image: 127.0.0.1:5000/booking_service:1
+        depends_on:
+            - mongo
         ports:
             - "8200:3000"
+        deploy:
+            mode: replicated
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 10s
+                failure_action: continue
+                monitor: 60s
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
         networks:
             - tick_stack
 
+    billing_service:
+        image: 127.0.0.1:5000/billing_service:1
+        depends_on:
+            - mongo
+        ports:
+            - "8300:3000"
+        deploy:
+            mode: replicated
+            replicas: 2
+            update_config:
+                parallelism: 1
+                delay: 10s
+                failure_action: continue
+                monitor: 60s
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 30s
+        networks:
+            - tick_stack
 
 networks:
     tick_stack:
