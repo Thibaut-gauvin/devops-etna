@@ -11,16 +11,23 @@ version: '3.2'
 services:
 
     proxy:
-        image: traefik
-        command: --web --docker --docker.domain=docker.localhost --logLevel=DEBUG
-        networks:
-            - tick_stack
+        image: traefik:latest
+        command:
+            - --web
+            - --logLevel=DEBUG
+            - --docker.domain=proxy
+            - --docker
+            - --docker.watch
         ports:
             - "80:80"
             - "8080:8080"
         volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
-            - "./traefik.toml:/traefik.toml"
+            - "/dev/null:/traefik.toml"
+        labels:
+            - "traefik.enable=false"
+        networks:
+            - traefik
 
     mongo:
         image: mongo:latest
@@ -28,6 +35,8 @@ services:
             - "./.docker_volumes/mongodb:/data/db"
         ports:
             - "27017:27017"
+        labels:
+            - "traefik.enable=false"
         networks:
             - tick_stack
 
@@ -35,14 +44,18 @@ services:
         image: mongo-express:latest
         depends_on:
             - mongo
-        ports:
-            - "82:8081"
         environment:
             - "ME_CONFIG_MONGODB_ENABLE_ADMIN=true"
             - "ME_CONFIG_BASICAUTH_USERNAME=etna"
             - "ME_CONFIG_BASICAUTH_PASSWORD=devops"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=mongo_express"
+            - "traefik.frontend.rule=Host:mongo.tick-stack.dev"
+            - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
+            - traefik
 
     catalog_service:
         build: ./src/CatalogService
@@ -51,10 +64,14 @@ services:
             - mongo
         volumes:
             - "./src/CatalogService:/app"
-        ports:
-            - "8100:3000"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=catalog_service"
+            - "traefik.frontend.rule=Host:catalog.tick-stack.dev"
+            - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
+            - traefik
 
     booking_service:
         build: ./src/BookingService
@@ -63,10 +80,14 @@ services:
             - mongo
         volumes:
             - "./src/BookingService:/app"
-        ports:
-            - "8200:3000"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=booking_service"
+            - "traefik.frontend.rule=Host:booking.tick-stack.dev"
+            - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
+            - traefik
 
     billing_service:
         build: ./src/BillingService
@@ -75,11 +96,18 @@ services:
             - mongo
         volumes:
             - "./src/BillingService:/app"
-        ports:
-            - "8300:3000"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=billing_service"
+            - "traefik.frontend.rule=Host:billing.tick-stack.dev"
+            - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
+            - traefik
+
 
 networks:
     tick_stack:
+        driver: bridge
+    traefik:
         driver: bridge

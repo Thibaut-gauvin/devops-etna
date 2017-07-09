@@ -11,34 +11,51 @@ version: '3.2'
 services:
 
     proxy:
-        image: traefik
-        command: --web --docker --docker.domain=docker.localhost
+        image: traefik:latest
+        command:
+            - --web
+            - --logLevel=DEBUG
+            - --docker.domain=proxy
+            - --docker
+            - --docker.watch
+            - --docker.swarmmode
         ports:
-            - "8181:80"
+            - "80:80"
             - "8080:8080"
         volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
-            - "./traefik.toml:/traefik.toml"
+            - "/dev/null:/traefik.toml"
         deploy:
             placement:
                 constraints: [node.role == manager]
+            labels:
+                - "traefik.enable=false"
         networks:
-            - tick_stack
+            - traefik
 
     visualizer:
         image: 127.0.0.1:5000/dockersamples/visualizer:stable
-        ports:
-            - "81:8080"
+        depends_on:
+            - proxy
         volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
         deploy:
             placement:
                 constraints: [node.role == manager]
+            labels:
+                - "traefik.enable=true"
+                - "traefik.port=8080"
+                - "traefik.backend=visualizer"
+                - "traefik.frontend.rule=Host:visualizer.tick-stack.com"
+                - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
+            - traefik
 
     mongo:
         image: 127.0.0.1:5000/mongo:latest
+        depends_on:
+            - proxy
         volumes:
             - "db-data:/data/db"
         ports:
@@ -46,6 +63,8 @@ services:
         deploy:
             placement:
                 constraints: [node.role == manager]
+            labels:
+                - "traefik.enable=false"
         networks:
             - tick_stack
 
@@ -53,24 +72,28 @@ services:
         image: 127.0.0.1:5000/mongo-express:latest
         depends_on:
             - mongo
-        ports:
-            - "82:8081"
         environment:
             - "ME_CONFIG_MONGODB_ENABLE_ADMIN=true"
             - "ME_CONFIG_BASICAUTH_USERNAME=etna"
             - "ME_CONFIG_BASICAUTH_PASSWORD=devops"
+        deploy:
+            labels:
+                - "traefik.enable=true"
+                - "traefik.port=8081"
+                - "traefik.backend=mongo_express"
+                - "traefik.frontend.rule=Host:mongo.tick-stack.com"
+                - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
+            - traefik
 
     catalog_service:
         image: 127.0.0.1:5000/catalog_service:1
         depends_on:
             - mongo
-        ports:
-            - "8100:3000"
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 3
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -81,18 +104,23 @@ services:
                 delay: 5s
                 max_attempts: 3
                 window: 30s
+            labels:
+                - "traefik.enable=true"
+                - "traefik.port=3000"
+                - "traefik.backend=catalog_service"
+                - "traefik.frontend.rule=Host:catalog.tick-stack.com"
+                - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
+            - traefik
 
     booking_service:
         image: 127.0.0.1:5000/booking_service:1
         depends_on:
             - mongo
-        ports:
-            - "8200:3000"
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 3
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -103,15 +131,20 @@ services:
                 delay: 5s
                 max_attempts: 3
                 window: 30s
+            labels:
+                - "traefik.enable=true"
+                - "traefik.port=3000"
+                - "traefik.backend=booking_service"
+                - "traefik.frontend.rule=Host:booking.tick-stack.com"
+                - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
+            - traefik
 
     billing_service:
         image: 127.0.0.1:5000/billing_service:1
         depends_on:
             - mongo
-        ports:
-            - "8300:3000"
         deploy:
             mode: replicated
             replicas: 2
@@ -125,11 +158,20 @@ services:
                 delay: 5s
                 max_attempts: 3
                 window: 30s
+            labels:
+                - "traefik.enable=true"
+                - "traefik.port=3000"
+                - "traefik.backend=billing_service"
+                - "traefik.frontend.rule=Host:billing.tick-stack.com"
+                - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
+            - traefik
+
 
 networks:
     tick_stack:
+    traefik:
 
 
 volumes:
