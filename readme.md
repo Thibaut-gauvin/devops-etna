@@ -61,6 +61,6 @@ Take a look at [docker helps](docs/docker.md).
 
 ## Architecture :
 
-Schema v1
+Schema v2
 
-![schema archi v1](docs/subjects/schema_archi_v1.png "schema archi v1")
+![schema archi v2](docs/subjects/schema_archi_v2.jpg "schema archi v2")
