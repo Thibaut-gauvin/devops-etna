@@ -5,11 +5,11 @@ const router = express.Router();
 const logic = require('./catalog-logic');
 
 /* GET booking API routes. */
-router.get('/hotels', listAllHotels);
-router.post('/hotel', addHotel);
-router.get('/hotel/:id', listUniqueHotel);
-router.put('/hotel/:id', editHotel);
-router.delete('/hotel/:id', deleteHotel);
+router.get('/', listAllHotels);
+router.post('/', addHotel);
+router.get('/:id', listUniqueHotel);
+router.put('/:id', editHotel);
+router.delete('/:id', deleteHotel);
 
 /**
  * get all hotels
