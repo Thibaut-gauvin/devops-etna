@@ -1,6 +1,6 @@
 ---
 # General config.
-gitlab_external_url: "https://192.168.42.100/"
+gitlab_external_url: "http://192.168.42.100:90"
 gitlab_git_data_dir: "/var/opt/gitlab/git-data"
 gitlab_edition: "gitlab-ce"
 gitlab_backup_path: "/var/opt/gitlab/backups"
