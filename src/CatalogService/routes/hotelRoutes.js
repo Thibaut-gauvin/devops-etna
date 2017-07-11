@@ -30,25 +30,18 @@ function listAllHotels (req, res, next) {
  */
 function addHotel(req, res, next) {
     req.checkBody('name', 'Name should not be empty').notEmpty();
-    req.checkBody('adress', 'Adress should not be empty').notEmpty();
+    req.checkBody('address', 'AdDress should not be empty').notEmpty();
     req.checkBody('phoneNumber', 'Phone number should not be empty').notEmpty();
     req.checkBody('roomQuantity', 'Room quantity not be empty').notEmpty();
 
-    req.getValidationResult().then(function(result) {
-        if (!result.isEmpty()) {
-            res.status(400).send('There have been validation errors: ' + util.inspect(result.array()));
-            return;
-        }
-        res.json({
-            urlparam: req.params.urlparam,
-            getparam: req.params.getparam,
-            postparam: req.params.postparam
-        });
-    });
-
-    logic.addHotel(req.body)
-        .then((result) => res.status(200).json(result))
-        .catch((err) => next(err))
+    let errors = req.validationErrors();
+    if (errors) {
+        res.send(errors);
+    } else {
+        logic.addHotel(req.body)
+            .then((result) => res.status(200).json(result))
+            .catch((err) => next(err))
+    }
 }
 /**
  * get an hotel by its id

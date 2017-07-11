@@ -26,14 +26,9 @@ function listAllHotels() {
  * @param {*} data
  */
 function addHotel(data) {
+
     return new Promise(function (resolve, reject) {
-        const newHotel = new Hotel({
-            name: data.name,
-            address: data.address,
-            phoneNumber: data.phoneNumber,
-            roomQuantity: data.roomQuantity,
-            createdDate: new Date()
-        })
+        const newHotel = new Hotel(data)
 
         newHotel.save()
             .then(function (hotel) {
