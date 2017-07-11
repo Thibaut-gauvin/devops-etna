@@ -59,7 +59,7 @@ services:
 
     catalog_service:
         build: ./src/CatalogService
-        command: nodemon --debug server.js
+        command: nodemon --debug ./bin/www
         depends_on:
             - mongo
         volumes:
