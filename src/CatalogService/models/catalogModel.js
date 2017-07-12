@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var CatalogSchema = new Schema({
+var HotelSchema = new Schema({
     name: {
         type: String,
         Required: 'Hotel name missing'
@@ -26,4 +26,4 @@ var CatalogSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Catalogs', CatalogSchema);
+module.exports = mongoose.model('hotel', HotelSchema);
