@@ -15,7 +15,7 @@ services:
         command:
             - --web
             - --logLevel=DEBUG
-            - --docker.domain=proxy
+            - --docker.domain=tick-stack.dev
             - --docker
             - --docker.watch
         ports:
@@ -67,7 +67,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.backend=catalog_service"
-            - "traefik.frontend.rule=Host:catalog.tick-stack.dev"
+            - "traefik.frontend.rule=PathPrefix:/catalog"
             - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
@@ -83,7 +83,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.backend=booking_service"
-            - "traefik.frontend.rule=Host:booking.tick-stack.dev"
+            - "traefik.frontend.rule=PathPrefix:/booking"
             - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack
@@ -99,7 +99,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.backend=billing_service"
-            - "traefik.frontend.rule=Host:billing.tick-stack.dev"
+            - "traefik.frontend.rule=PathPrefix:/billing"
             - "traefik.docker.network=devopsetna_traefik"
         networks:
             - tick_stack

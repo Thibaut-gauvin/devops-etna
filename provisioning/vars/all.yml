@@ -8,10 +8,6 @@ ip_worker2: "192.168.42.120"
 docker_registry_port: 5000
 docker_registry_url: "127.0.0.1:{{ docker_registry_port }}"
 
-# Custom Images
-custom_img_name: base_service
-custom_img_tag: 1
-
 # The project root directory on distant machine
 project_root_directory: /vagrant
 

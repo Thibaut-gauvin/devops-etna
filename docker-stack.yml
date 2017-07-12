@@ -15,7 +15,7 @@ services:
         command:
             - --web
             - --logLevel=DEBUG
-            - --docker.domain=proxy
+            - --docker.domain=tick-stack.com
             - --docker
             - --docker.watch
             - --docker.swarmmode
@@ -88,12 +88,12 @@ services:
             - traefik
 
     catalog_service:
-        image: 127.0.0.1:5000/catalog_service:1
+        image: 127.0.0.1:5000/catalog_service:1.1
         depends_on:
             - mongo
         deploy:
             mode: replicated
-            replicas: 3
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -108,19 +108,19 @@ services:
                 - "traefik.enable=true"
                 - "traefik.port=3000"
                 - "traefik.backend=catalog_service"
-                - "traefik.frontend.rule=Host:catalog.tick-stack.com"
+                - "traefik.frontend.rule=PathPrefix:/catalog"
                 - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
             - traefik
 
     booking_service:
-        image: 127.0.0.1:5000/booking_service:1
+        image: 127.0.0.1:5000/booking_service:1.1
         depends_on:
             - mongo
         deploy:
             mode: replicated
-            replicas: 3
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -135,19 +135,19 @@ services:
                 - "traefik.enable=true"
                 - "traefik.port=3000"
                 - "traefik.backend=booking_service"
-                - "traefik.frontend.rule=Host:booking.tick-stack.com"
+                - "traefik.frontend.rule=PathPrefix:/booking"
                 - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack
             - traefik
 
     billing_service:
-        image: 127.0.0.1:5000/billing_service:1
+        image: 127.0.0.1:5000/billing_service:1.1
         depends_on:
             - mongo
         deploy:
             mode: replicated
-            replicas: 2
+            replicas: 1
             update_config:
                 parallelism: 1
                 delay: 10s
@@ -162,7 +162,7 @@ services:
                 - "traefik.enable=true"
                 - "traefik.port=3000"
                 - "traefik.backend=billing_service"
-                - "traefik.frontend.rule=Host:billing.tick-stack.com"
+                - "traefik.frontend.rule=Host:PathPrefix:/billing"
                 - "traefik.docker.network=tick_stack_traefik"
         networks:
             - tick_stack

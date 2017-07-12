@@ -6,6 +6,6 @@ docker_images:
   - { name: ubuntu, tag: 14.04 }
 
 service_images:
-  - { name: booking_service, tag: 1, path: "{{ project_root_directory }}/src/BookingService" }
-  - { name: catalog_service, tag: 1, path: "{{ project_root_directory }}/src/CatalogService" }
-  - { name: billing_service, tag: 1, path: "{{ project_root_directory }}/src/BillingService" }
+  - { name: booking_service, tag: 1.1, path: "{{ project_root_directory }}/src/BookingService" }
+  - { name: catalog_service, tag: 1.1, path: "{{ project_root_directory }}/src/CatalogService" }
+  - { name: billing_service, tag: 1.1, path: "{{ project_root_directory }}/src/BillingService" }

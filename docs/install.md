@@ -17,7 +17,7 @@ To provision virtual machines you need :
 
 
 - **Start & Build VM :**
-    
+
         $ make provision
 
 
@@ -26,5 +26,5 @@ To provision virtual machines you need :
         sudo nano /etc/hosts
 
         # Add following entries
-        127.0.0.1 tick-stack.dev catalog.tick-stack.dev booking.tick-stack.dev billing.tick-stack.dev mongo.tick-stack.dev
-        192.168.42.100 tick-stack.com catalog.tick-stack.com booking.tick-stack.com billing.tick-stack.com mongo.tick-stack.com visualizer.tick-stack.com
+        127.0.0.1 tick-stack.dev mongo.tick-stack.dev
+        192.168.42.100 tick-stack.com mongo.tick-stack.com visualizer.tick-stack.com
