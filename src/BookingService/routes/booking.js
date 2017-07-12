@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const logic = require('./booking-logic')
+var http = require('http');
 
 /* GET booking API routes. */
 router.get('/', listAllBooking)
@@ -18,7 +19,19 @@ router.delete('/:id', deleteBooking)
  * @param {*} next 
  */
 function listAllBooking (req, res, next) {
-  logic.listAllBooking()
+    var options = {
+        host: 'catalog_service',
+        port: 3000,
+        path: '/catalog/hotels'
+    };
+
+    http.get(options, function(res) {
+        console.log("Got response: " + res.statusCode);
+    }).on('error', function(e) {
+        console.log("Got error: " + e.message);
+    });
+
+    logic.listAllBooking()
   .then((result) => res.status(200).json(result))
   .catch((err) => next(err))
 };
