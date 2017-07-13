@@ -1,9 +1,11 @@
 before_script:
-  - docker info
-  - docker-compose build
+  - docker-compose -f docker-compose-test.yml build
+
+after_script:
+  - docker-compose -f docker-compose-test.yml down
 
 build_image:
   script:
-    - docker-compose run billing_service yarn test
-    - docker-compose run booking_service yarn test
-    # - docker-compose run catalog_service yarn test
+    - docker-compose -f docker-compose-test.yml run billing_service yarn test
+    - docker-compose -f docker-compose-test.yml run booking_service yarn test
+    # - docker-compose -f docker-compose-test.yml run catalog_service yarn test

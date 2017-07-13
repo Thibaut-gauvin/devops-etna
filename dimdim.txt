@@ -1,0 +1,49 @@
+Si ta vu les screenshoots sur slack, tu va devoir configurer le runner toi même car j'ai pas pu le faire avec ansibelouche
+ps: faut faire les commandes dans la vm manager of course ;)
+
+--------------
+
+# Install gitlab-runner :
+
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh | sudo bash
+sudo apt-get update
+sudo apt-get install gitlab-ci-multi-runner
+
+--------------
+
+# Check agent is running :
+
+sudo gitlab-ci-multi-runner status
+gitlab-runner: Service is running!
+
+--------------
+
+# Add gitlab-runner to docker group :
+
+sudo usermod -aG docker gitlab-runner
+
+--------------
+
+# Register gitlab-runner :
+
+visit http://192.168.42.100:90/admin/runners to get the worker token and replace REGISTRATION_TOKEN by your token
+
+sudo gitlab-ci-multi-runner register \
+  --url "http://192.168.42.100:90" \
+  --registration-token "REGISTRATION_TOKEN" \
+  --executor shell \
+  --description "tests tick-stack"
+
+view http://192.168.42.100:90/admin/runners and runner appear !, click and edit config to run with project 
+
+--------------
+
+# Pb de build à cause des volumes docker entre deux tests
+
+pour trouver le volume qui fait chier :
+
+sudo find / -name ".docker_volumes"
+/home/gitlab-runner/builds/0737cd04/0/devops/devops-etna/.docker_volumes
+
+et pour l'effacer:
+sudo rm -rf path ...
