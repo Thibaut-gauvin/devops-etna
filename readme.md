@@ -50,15 +50,14 @@ Take a look at [docker helps](docs/docker.md).
 
     host:
 
-    - Traefik 80 [http://192.168.42.100](http://192.168.42.100)
     - Traefik manager [http://192.168.42.100:8080](http://192.168.42.100:8080)
     - Docker Visualizer [visualizer.tick-stack.com](http://visualizer.tick-stack.com)
     - Mongo Express [mongo.tick-stack.com](http://mongo.tick-stack.com) (id:etna, pass:devops)
-    - Catalog micro-service [catalog.tick-stack.com](http://catalog.tick-stack.com)
-    - Booking micro-service [booking.tick-stack.com](http://booking.tick-stack.com)
-    - Billing micro-service [billing.tick-stack.com](http://billing.tick-stack.com)
+    - Catalog micro-service [tick-stack.com/catalog/hotels](http://tick-stack.com/catalog/hotels)
+    - Booking micro-service [tick-stack.com/booking](http://tick-stack.com/booking)
+    - Billing micro-service [tick-stack.com/billing](http://tick-stack.com/billing)
 
-    - Gitlab [http://192.168.42.100:8000](http://192.168.42.100:8000)
+    - Gitlab [http://192.168.42.100:90](http://192.168.42.100:90)
 
 ## Architecture :
 
