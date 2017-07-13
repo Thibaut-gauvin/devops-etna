@@ -34,11 +34,24 @@ sudo gitlab-ci-multi-runner register \
   --executor shell \
   --description "tests tick-stack"
 
-view http://192.168.42.100:90/admin/runners and runner appear !, click and edit config to run with project 
+view http://192.168.42.100:90/admin/runners and runner appear !, click and edit config to run with project
+
+
+# Once runner is configured, it can run test on every change
+
+add ssh key to your local gitlab account, create project & push it to gitlab (adapt url)
+
+Add gitlab remote url in addition to origin :
+
+  git remote add gitlab git@192.168.42.100:devops/devops-etna.git
+  git push gitlab add-service # or other test branch, but no push to origin (github)
+
+
+And see the magic !
 
 --------------
 
-# Pb de build à cause des volumes docker entre deux tests
+# Pb de build à cause des volumes docker entre deux tests (resolu maggle)
 
 pour trouver le volume qui fait chier :
 
