@@ -1,6 +1,11 @@
 ---
 docker_images:
-  - { name: nginx, tag: latest }
-  - { name: php, tag: 7.1-fpm }
-  - { name: mysql, tag: 5.7 }
   - { name: dockersamples/visualizer, tag: stable}
+  - { name: mongo, tag: latest}
+  - { name: mongo-express, tag: latest }
+  - { name: ubuntu, tag: 14.04 }
+
+service_images:
+  - { name: booking_service, tag: 1.1, path: "{{ project_root_directory }}/src/BookingService" }
+  - { name: catalog_service, tag: 1.1, path: "{{ project_root_directory }}/src/CatalogService" }
+  - { name: billing_service, tag: 1.1, path: "{{ project_root_directory }}/src/BillingService" }

@@ -1,9 +1,10 @@
 ---
-- name: Build custom "{{ symfony_img_name }}" image
+- name: Builds custom services images
   become: true
   when: "'managers' in group_names"
   docker_image:
-    name: "{{ symfony_img_name }}"
-    tag: "{{ symfony_img_tag }}"
-    path: "{{ project_root_directory }}/provisioning/docker"
+    name: "{{ item.name }}"
+    tag: "{{ item.tag }}"
+    path: "{{ item.path }}"
     state: present
+  with_items: "{{ service_images }}"

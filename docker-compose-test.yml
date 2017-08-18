@@ -1,0 +1,38 @@
+####
+# This file is used to run the test
+
+version: '3.2'
+
+services:
+
+    mongo:
+        image: mongo:latest
+        ports:
+            - "27017:27017"
+        networks:
+            - tick_stack
+
+    catalog_service:
+        build: ./src/CatalogService
+        depends_on:
+            - mongo
+        networks:
+            - tick_stack
+
+    booking_service:
+        build: ./src/BookingService
+        depends_on:
+            - mongo
+        networks:
+            - tick_stack
+
+    billing_service:
+        build: ./src/BillingService
+        depends_on:
+            - mongo
+        networks:
+            - tick_stack
+
+networks:
+    tick_stack:
+        driver: bridge

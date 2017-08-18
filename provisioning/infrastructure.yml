@@ -13,5 +13,4 @@
     - docker_swarm
     - docker_registry
     - gitlab
-#    - docker_tickstack
-#    - docker_traefik
+    - docker_tickstack

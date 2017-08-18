@@ -11,18 +11,19 @@
     - :white_check_mark: Configure Swarm Manager
     - :white_check_mark: Configure Swarm Workers
 - 3). Deploy a Docker Registry
-    - :white_check_mark: configure the Docker Registry
-    - :white_check_mark: run the Docker Registry
+    - :white_check_mark: Configure the Docker Registry
+    - :white_check_mark: Run the Docker Registry
 - 4). Deploy TICK stack via Ansible
-    - :negative_squared_cross_mark: Build custom docker images
-    - :negative_squared_cross_mark: Push images to docker registry
-    - :negative_squared_cross_mark: Updates registry images
-    - :negative_squared_cross_mark: Deploy container on swarm cluster
+    - :white_check_mark: Pull & Build docker images
+    - :white_check_mark: Push images to the Docker Registry
+    - :white_check_mark: Updates the Docker Registry images
+    - :white_check_mark: Deploy tick_stack on Docker Swarm cluster
 - 5). Build Continuous Integration & Continuous Deployment infrastructures
     - :white_check_mark: Install & configure a GITLAB instance on the manager node
-- 6). Build & configure CI & CD pipeline
-- 7). Deploy Reverse Proxy & Load Balancing solution
-- (BONUS) Deploy Elastic Search & Kibana
+- 6). Build & Configure CI & CD pipeline
+    - :negative_squared_cross_mark: Configure pipeline to run test inside docker container
+- 7). :white_check_mark: Deploy Reverse Proxy & Load Balancing solution (Traefik)
+- :negative_squared_cross_mark: (BONUS) Deploy Elastic Search & Kibana
 
 
 ## Subject
@@ -39,3 +40,27 @@ Take a look at [install guide](docs/install.md).
 ## Docker helps :
 
 Take a look at [docker helps](docs/docker.md).
+
+
+## Urls :
+
+- Swarm Mode inside the 3 VM
+
+    VM ip address is [192.168.42.100, 192.168.42.110, 192.168.42.120]
+
+    host:
+
+    - Traefik manager [http://192.168.42.100:8080](http://192.168.42.100:8080)
+    - Docker Visualizer [visualizer.tick-stack.com](http://visualizer.tick-stack.com)
+    - Mongo Express [mongo.tick-stack.com](http://mongo.tick-stack.com) (id:etna, pass:devops)
+    - Catalog micro-service [tick-stack.com/catalog/hotels](http://tick-stack.com/catalog/hotels)
+    - Booking micro-service [tick-stack.com/booking](http://tick-stack.com/booking)
+    - Billing micro-service [tick-stack.com/billing](http://tick-stack.com/billing)
+
+    - Gitlab [http://192.168.42.100:90](http://192.168.42.100:90)
+
+## Architecture :
+
+Schema v2
+
+![schema archi v2](docs/subjects/schema_archi_v2.jpg "schema archi v2")

@@ -1,30 +1,24 @@
-FROM php:7.1-fpm
+FROM ubuntu:14.04
 
-# Install some packages, extentions & composer
+# Define working directory
+WORKDIR /app
+
+# Install base package for dev
 RUN apt-get update \
     && apt-get install -y \
-        libicu-dev \
-        zlib1g-dev \
+        build-essential \
         git \
+        curl \
         wget \
-    && docker-php-ext-install \
-        zip \
-        intl \
-        json \
-        mbstring \
-        mysqli \
-        pdo_mysql \
-    && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer \
-    && chmod +x /usr/local/bin/composer
+        sudo
 
-# Install NodeJs
+# Install NodeJs last LTS release
 RUN curl -o /tmp/setup_node.sh https://deb.nodesource.com/setup_6.x
 RUN chmod +x /tmp/setup_node.sh
 RUN /tmp/setup_node.sh
 RUN apt-get update \
     && apt-get install -y \
-    nodejs \
-    build-essential
+    nodejs
 
 # Install Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -32,3 +26,17 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get update \
     && apt-get install -y \
     yarn
+
+# Install nodemon globally
+RUN npm install -g nodemon
+
+# Install application dependencies
+ADD package.json /app/package.json
+RUN yarn install && yarn list
+RUN mv /app/node_modules /node_modules
+ADD . /app
+
+# Expose Port
+EXPOSE 3000
+
+CMD ["node", "./bin/www"]

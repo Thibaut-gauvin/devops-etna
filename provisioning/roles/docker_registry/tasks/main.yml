@@ -24,4 +24,4 @@
 - name: Start the Registry service
   become: true
   when: "'managers' in group_names and registry_created.stdout == ''"
-  shell: "docker service create --name registry --publish 5000:5000 --mount type=bind,source={{ project_root_directory }}/provisioning/docker/.docker_volumes/registry,destination=/var/lib/registry --constraint 'node.role == manager' registry:2"
+  shell: "docker service create --name registry --publish {{ docker_registry_port }}:5000 --mount type=bind,source={{ project_root_directory }}/.docker_volumes/registry,destination=/var/lib/registry --constraint 'node.role == manager' registry:2"

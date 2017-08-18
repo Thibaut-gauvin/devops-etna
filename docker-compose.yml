@@ -1,0 +1,113 @@
+####
+# This file is used to run the tick_stack locally
+# To deploy the tick_stack in docker swarm, use the "docker-stack.yml" file
+#
+# To deploy in CLI with your hands, use this command :
+# docker-compose up -d
+
+
+version: '3.2'
+
+services:
+
+    proxy:
+        image: traefik:latest
+        command:
+            - --web
+            - --logLevel=DEBUG
+            - --docker.domain=tick-stack.dev
+            - --docker
+            - --docker.watch
+        ports:
+            - "80:80"
+            - "8080:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock"
+            - "/dev/null:/traefik.toml"
+        labels:
+            - "traefik.enable=false"
+        networks:
+            - traefik
+
+    mongo:
+        image: mongo:latest
+        volumes:
+            - "./.docker_volumes/mongodb:/data/db"
+        ports:
+            - "27017:27017"
+        labels:
+            - "traefik.enable=false"
+        networks:
+            - tick_stack
+
+    mongo_express:
+        image: mongo-express:latest
+        depends_on:
+            - mongo
+        environment:
+            - "ME_CONFIG_MONGODB_ENABLE_ADMIN=true"
+            - "ME_CONFIG_BASICAUTH_USERNAME=etna"
+            - "ME_CONFIG_BASICAUTH_PASSWORD=devops"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=mongo_express"
+            - "traefik.frontend.rule=Host:mongo.tick-stack.dev"
+            - "traefik.docker.network=devopsetna_traefik"
+        networks:
+            - tick_stack
+            - traefik
+
+    catalog_service:
+        build: ./src/CatalogService
+        command: nodemon --debug ./bin/www
+        depends_on:
+            - mongo
+        volumes:
+            - "./src/CatalogService:/app"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=catalog_service"
+            - "traefik.frontend.rule=PathPrefix:/catalog"
+            - "traefik.docker.network=devopsetna_traefik"
+        networks:
+            - tick_stack
+            - traefik
+
+    booking_service:
+        build: ./src/BookingService
+        command: nodemon --debug ./bin/www
+        depends_on:
+            - mongo
+        volumes:
+            - "./src/BookingService:/app"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=booking_service"
+            - "traefik.frontend.rule=PathPrefix:/booking"
+            - "traefik.docker.network=devopsetna_traefik"
+        networks:
+            - tick_stack
+            - traefik
+
+    billing_service:
+        build: ./src/BillingService
+        command: nodemon --debug ./bin/www
+        depends_on:
+            - mongo
+        volumes:
+            - "./src/BillingService:/app"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.backend=billing_service"
+            - "traefik.frontend.rule=PathPrefix:/billing"
+            - "traefik.docker.network=devopsetna_traefik"
+        networks:
+            - tick_stack
+            - traefik
+
+
+networks:
+    tick_stack:
+        driver: bridge
+    traefik:
+        driver: bridge
